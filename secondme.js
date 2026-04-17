@@ -14,11 +14,12 @@ const SecondMe = (function() {
         route: 'xiaolin110',
         homepage: 'https://second.me/xiaolin110',
         pageSize: 10,
-        focusAreas: ['罕见病研究', '临床研究方法学', 'AI制药', '消费医疗', '数字医疗创业']
+        focusAreas: ['罕见病研究', '临床研究方法学', 'AI制药', '消费医疗', '数字医疗创业'],
+        // 代理地址 — 部署 Cloudflare Worker 后在此填入
+        proxyUrl: localStorage.getItem('opc_sm_proxy') || ''
     };
 
     let config = { ...DEFAULT_CONFIG };
-    // Load saved config
     try {
         const saved = JSON.parse(localStorage.getItem('opc_secondme_config'));
         if (saved) config = { ...config, ...saved };
@@ -29,33 +30,50 @@ const SecondMe = (function() {
         localStorage.setItem('opc_secondme_config', JSON.stringify(config));
     }
 
-    function getHeaders() {
-        return {
-            'Authorization': `${config.tokenType} ${config.token}`,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        };
-    }
+    // ---- API Call Strategies ----
+    // 1. Proxy (if configured) — always CORS-safe
+    // 2. Direct call — works if browser has CORS extension
+    // 3. Public CORS proxy — fallback for testing
 
-    // CORS-safe fetch — tries direct first, falls back to proxy
-    async function apiCall(method, path, body = null) {
-        const url = `${config.apiBase}${path}`;
-        const opts = {
-            method,
-            headers: getHeaders(),
-            mode: 'cors'
-        };
-        if (body && method !== 'GET') {
-            opts.body = JSON.stringify(body);
+    async function apiCall(method, apiPath, body = null) {
+        const fullUrl = `${config.apiBase}${apiPath}`;
+
+        // Strategy 1: Custom proxy (Cloudflare Worker / Vercel)
+        if (config.proxyUrl) {
+            try {
+                const proxyEndpoint = `${config.proxyUrl}?path=${encodeURIComponent(apiPath)}`;
+                const opts = {
+                    method,
+                    headers: { 'Content-Type': 'application/json' }
+                };
+                if (body && method !== 'GET') opts.body = JSON.stringify(body);
+                const resp = await fetch(proxyEndpoint, opts);
+                const data = await resp.json();
+                if (resp.ok || data.code !== undefined) {
+                    return { ok: resp.ok, status: resp.status, data, via: 'proxy' };
+                }
+            } catch(e) { /* fall through */ }
         }
 
+        // Strategy 2: Direct call
         try {
-            const resp = await fetch(url, opts);
+            const opts = {
+                method,
+                headers: {
+                    'Authorization': `${config.tokenType} ${config.token}`,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            };
+            if (body && method !== 'GET') opts.body = JSON.stringify(body);
+            const resp = await fetch(fullUrl, opts);
             const data = await resp.json();
-            return { ok: resp.ok, status: resp.status, data };
-        } catch (err) {
-            // CORS or network error
-            return { ok: false, status: 0, error: err.message, data: null };
+            return { ok: resp.ok, status: resp.status, data, via: 'direct' };
+        } catch(e) {
+            if (e.message && e.message.includes('Failed to fetch')) {
+                return { ok: false, status: 0, error: 'CORS_BLOCKED', data: null, via: 'none' };
+            }
+            return { ok: false, status: 0, error: e.message, data: null, via: 'none' };
         }
     }
 

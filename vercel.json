@@ -1,0 +1,13 @@
+{
+    "version": 2,
+    "builds": [
+        { "src": "api/proxy/secondme.js", "use": "@vercel/node" },
+        { "src": "*.html", "use": "@vercel/static" },
+        { "src": "*.css", "use": "@vercel/static" },
+        { "src": "*.js", "use": "@vercel/static" }
+    ],
+    "routes": [
+        { "src": "/api/proxy/secondme", "dest": "/api/proxy/secondme.js" },
+        { "src": "/(.*)", "dest": "/$1" }
+    ]
+}

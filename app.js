@@ -665,6 +665,7 @@
         if (!panel.classList.contains('hidden')) {
             document.getElementById('smTokenInput').value = SecondMe.getConfig().token;
             document.getElementById('smApiInput').value = SecondMe.getConfig().apiBase;
+            document.getElementById('smProxyInput').value = SecondMe.getConfig().proxyUrl || '';
         }
     });
 
@@ -675,8 +676,13 @@
     document.getElementById('smSaveBtn').addEventListener('click', () => {
         const token = document.getElementById('smTokenInput').value.trim();
         const apiBase = document.getElementById('smApiInput').value.trim();
-        if (token) SecondMe.updateConfig({ token });
-        if (apiBase) SecondMe.updateConfig({ apiBase });
+        const proxyUrl = document.getElementById('smProxyInput').value.trim();
+        const updates = {};
+        if (token) updates.token = token;
+        if (apiBase) updates.apiBase = apiBase;
+        updates.proxyUrl = proxyUrl;
+        SecondMe.updateConfig(updates);
+        localStorage.setItem('opc_sm_proxy', proxyUrl);
         document.getElementById('smSettings').classList.add('hidden');
         checkSMConnection();
     });
@@ -713,16 +719,23 @@
 
         const result = await SecondMe.getFeed(page);
         
-        if (result.status === 0) {
+        if (result.error === 'CORS_BLOCKED' || result.status === 0) {
             // CORS error — show proxy instructions
             list.innerHTML = `
                 <div class="sm-empty">
                     <p>⚠️ 浏览器跨域限制</p>
-                    <p style="font-size:0.82rem;color:var(--text-muted);margin-top:8px;">
-                        GitHub Pages 是静态站点，无法直接调用 SecondMe API。<br>
-                        解决方案：安装 CORS Unblock 浏览器扩展，或使用本地代理。
-                    </p>
-                    <button class="btn-outline" style="margin-top:12px;" onclick="loadSMFeed(1)">🔄 重试</button>
+                    <div style="text-align:left;max-width:500px;margin:16px auto;font-size:0.82rem;color:var(--text-dim);line-height:1.7;">
+                        <p style="margin-bottom:12px;"><strong>一键解决（2分钟）：</strong></p>
+                        <ol style="padding-left:20px;">
+                            <li>打开 <a href="https://dash.cloudflare.com" target="_blank" style="color:var(--accent-light);">dash.cloudflare.com</a></li>
+                            <li>Workers & Pages → Create Worker</li>
+                            <li>把 <code style="background:var(--bg-surface);padding:2px 6px;border-radius:4px;">worker.js</code> 代码粘贴进去</li>
+                            <li>点 Deploy，复制 Worker URL</li>
+                            <li>点下面 ⚙️ 配置，填入代理 URL</li>
+                        </ol>
+                        <p style="margin-top:12px;color:var(--text-muted);">或安装 <a href="https://chromewebstore.google.com/detail/cors-unblock/lfhmikememgdcahcdlaciloancbhjino" target="_blank" style="color:var(--accent-light);">CORS Unblock</a> 浏览器扩展后刷新</p>
+                    </div>
+                    <button class="btn-outline" style="margin-top:8px;" onclick="document.getElementById('smSettingsBtn').click()">⚙️ 配置代理</button>
                 </div>`;
             document.getElementById('smStatus').textContent = '⚠ CORS限制';
             document.getElementById('smStatus').className = 'sm-status error';
