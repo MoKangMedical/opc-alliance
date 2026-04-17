@@ -82,6 +82,10 @@
                     <span class="nav-icon">🛠️</span>
                     <span>项目展示</span>
                 </a>
+                <a href="#" class="nav-item" data-page="legends">
+                    <span class="nav-icon">🏆</span>
+                    <span>名人堂</span>
+                </a>
                 <div class="nav-divider"></div>
                 <a href="#" class="nav-item" data-page="secondme">
                     <span class="nav-icon">🧠</span>
@@ -385,6 +389,31 @@
                     </div>
                     <div id="projectsList" class="projects-grid"></div>
                 </div>
+
+                <!-- Legends / Hall of Fame Page -->
+                <div class="page" id="page-legends">
+                    <div class="page-header">
+                        <h1>🏆 OPC 名人堂</h1>
+                        <p>全球最成功的一人公司创业者。点击卡片探索他们的商业思维。</p>
+                    </div>
+                    <div class="filter-bar" id="legendsFilterBar">
+                        <button class="filter-btn active" data-filter="all">全部</button>
+                        <button class="filter-btn" data-filter="saas">SaaS</button>
+                        <button class="filter-btn" data-filter="content">内容</button>
+                        <button class="filter-btn" data-filter="finance">金融</button>
+                        <button class="filter-btn" data-filter="creator">创作者</button>
+                        <button class="filter-btn" data-filter="consulting">咨询</button>
+                    </div>
+                    <div class="legends-grid" id="legendsGrid"></div>
+                </div>
+
+                <!-- Legend Detail Modal -->
+                <div class="modal-overlay" id="legendModalOverlay">
+                    <div class="modal legend-detail-modal">
+                        <button class="modal-close" id="legendModalClose">&times;</button>
+                        <div id="legendModalContent"></div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -402,6 +431,7 @@
     </div>
 
     <script src="data.js"></script>
+    <script src="legends-data.js"></script>
     <script src="secondme.js"></script>
     <script src="app.js"></script>
 </body>

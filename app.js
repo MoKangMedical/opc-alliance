@@ -636,6 +636,118 @@
     if (user) renderAll();
 
     // ========================================
+    // Legends / Hall of Fame
+    // ========================================
+
+    function renderLegendsCards(filter = 'all') {
+        const grid = document.getElementById('legendsGrid');
+        if (!grid || typeof LEGENDS === 'undefined') return;
+
+        const filtered = filter === 'all' ? LEGENDS : LEGENDS.filter(l => l.category.includes(filter));
+
+        grid.innerHTML = filtered.map((legend, i) => `
+            <div class="legend-card fade-in" data-id="${legend.id}" style="animation-delay:${i * 0.05}s">
+                <div class="legend-card-header">
+                    <div class="legend-avatar-wrap">${legend.avatar}</div>
+                    <div class="legend-info">
+                        <h3>${legend.nameZh || legend.name}</h3>
+                        <span class="legend-role">${legend.roleZh || legend.role}</span>
+                    </div>
+                </div>
+                <p class="legend-bio">${legend.bioZh || legend.bio}</p>
+                <div class="legend-metrics">
+                    ${(legend.metrics || []).slice(0, 3).map(m => `
+                        <div class="legend-metric">
+                            <span class="val">${m.value}</span>
+                            <span class="lbl">${m.labelZh || m.label}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="legend-tags">
+                    ${(legend.tags || []).map(t => `<span class="legend-tag">${t}</span>`).join('')}
+                </div>
+            </div>
+        `).join('');
+
+        requestAnimationFrame(() => {
+            grid.querySelectorAll('.fade-in').forEach((el, i) => {
+                setTimeout(() => el.classList.add('visible'), i * 50);
+            });
+        });
+
+        grid.querySelectorAll('.legend-card').forEach(card => {
+            card.addEventListener('click', () => openLegendModal(card.dataset.id));
+        });
+    }
+
+    function openLegendModal(id) {
+        const legend = LEGENDS.find(l => l.id === id);
+        if (!legend) return;
+
+        document.getElementById('legendModalContent').innerHTML = `
+            <div class="lg-modal-header">
+                <div class="lg-modal-avatar">${legend.avatar}</div>
+                <div>
+                    <h2 class="lg-modal-title">${legend.nameZh || legend.name}</h2>
+                    <p class="lg-modal-role">${legend.roleZh || legend.role}</p>
+                    <div class="lg-modal-links">
+                        ${legend.website ? `<a href="${legend.website}" target="_blank">官网</a>` : ''}
+                        ${legend.twitter ? `<a href="${legend.twitter}" target="_blank">Twitter/X</a>` : ''}
+                    </div>
+                </div>
+            </div>
+            <div class="lg-modal-metrics">
+                ${(legend.metrics || []).map(m => `
+                    <div class="lg-metric-box">
+                        <span class="v">${m.value}</span>
+                        <span class="l">${m.labelZh || m.label}</span>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="lg-section">
+                <h4>简介</h4>
+                <p>${legend.bioZh || legend.bio}</p>
+            </div>
+            <div class="lg-quote">"${legend.quoteZh || legend.quote}"</div>
+            <div class="lg-section">
+                <h4>商业哲学</h4>
+                <ul>${(legend.philosophyZh || legend.philosophy || []).map(p => `<li>${p}</li>`).join('')}</ul>
+            </div>
+            <div class="lg-section">
+                <h4>核心洞察</h4>
+                <p>${legend.keyInsightZh || legend.keyInsight}</p>
+            </div>
+            <div class="lg-section">
+                <h4>商业模式</h4>
+                <p>${legend.businessModelZh || legend.businessModel}</p>
+            </div>
+        `;
+        document.getElementById('legendModalOverlay').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLegendModal() {
+        document.getElementById('legendModalOverlay').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Legend filter buttons
+    document.getElementById('legendsFilterBar')?.addEventListener('click', (e) => {
+        if (e.target.classList.contains('filter-btn')) {
+            document.querySelectorAll('#legendsFilterBar .filter-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            renderLegendsCards(e.target.dataset.filter);
+        }
+    });
+
+    // Legend modal close
+    document.getElementById('legendModalClose')?.addEventListener('click', closeLegendModal);
+    document.getElementById('legendModalOverlay')?.addEventListener('click', (e) => {
+        if (e.target.id === 'legendModalOverlay') closeLegendModal();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLegendModal(); });
+
+    // ========================================
     // SecondMe Integration
     // ========================================
     const smCfg = SecondMe.getConfig();
@@ -908,5 +1020,8 @@
     updateSMProfile();
     renderSyncList();
     checkSMConnection();
+
+    // Init Legends on first load
+    renderLegendsCards();
 
 })();
