@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPC创业者联盟 — One Person Company Alliance</title>
+    <meta name="description" content="全球一人公司创业者联盟。分享想法、互动交流、资源共创。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Onboarding Modal -->
+    <div class="modal-overlay active" id="onboardingModal">
+        <div class="modal onboarding-modal">
+            <div class="onboarding-content">
+                <div class="onboarding-logo">◆</div>
+                <h2>欢迎加入 OPC 创业者联盟</h2>
+                <p class="onboarding-desc">One Person Company · 一个人就是一家公司</p>
+                <div class="onboarding-form">
+                    <div class="form-group">
+                        <label>你的名字 / 昵称</label>
+                        <input type="text" id="obName" placeholder="例如: 张三 / Alex" maxlength="20">
+                    </div>
+                    <div class="form-group">
+                        <label>一句话介绍自己</label>
+                        <input type="text" id="obBio" placeholder="例如: 独立开发者，在做AI工具" maxlength="80">
+                    </div>
+                    <div class="form-group">
+                        <label>你擅长什么？（选一个）</label>
+                        <div class="role-grid">
+                            <button class="role-btn active" data-role="developer">💻 开发者</button>
+                            <button class="role-btn" data-role="designer">🎨 设计师</button>
+                            <button class="role-btn" data-role="creator">✍️ 内容创作者</button>
+                            <button class="role-btn" data-role="marketer">📢 营销人</button>
+                            <button class="role-btn" data-role="investor">💰 投资人</button>
+                            <button class="role-btn" data-role="founder">🚀 创业者</button>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-lg" id="obSubmit">加入联盟 →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Shell -->
+    <div class="app" id="app">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="logo-icon">◆</span>
+                    <span class="logo-text">OPC <span class="accent">联盟</span></span>
+                </div>
+                <button class="sidebar-close" id="sidebarClose">✕</button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="home">
+                    <span class="nav-icon">🏠</span>
+                    <span>首页</span>
+                </a>
+                <a href="#" class="nav-item" data-page="ideas">
+                    <span class="nav-icon">💡</span>
+                    <span>想法广场</span>
+                    <span class="nav-badge" id="ideasBadge">0</span>
+                </a>
+                <a href="#" class="nav-item" data-page="resources">
+                    <span class="nav-icon">📚</span>
+                    <span>资源库</span>
+                </a>
+                <a href="#" class="nav-item" data-page="members">
+                    <span class="nav-icon">👥</span>
+                    <span>成员</span>
+                </a>
+                <a href="#" class="nav-item" data-page="discussions">
+                    <span class="nav-icon">💬</span>
+                    <span>讨论区</span>
+                </a>
+                <a href="#" class="nav-item" data-page="projects">
+                    <span class="nav-icon">🛠️</span>
+                    <span>项目展示</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-user" id="sidebarUser">
+                <div class="user-avatar" id="userAvatarSidebar">?</div>
+                <div class="user-info">
+                    <span class="user-name" id="userNameSidebar">未登录</span>
+                    <span class="user-role" id="userRoleSidebar">—</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <button class="menu-toggle" id="menuToggle">☰</button>
+                <div class="topbar-search">
+                    <input type="text" placeholder="搜索想法、资源、成员..." id="globalSearch">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <div class="topbar-actions">
+                    <button class="btn-icon" id="notifBtn" title="通知">🔔<span class="notif-dot" id="notifDot"></span></button>
+                </div>
+            </header>
+
+            <!-- Page Container -->
+            <div class="page-container" id="pageContainer">
+                <!-- Home Page -->
+                <div class="page active" id="page-home">
+                    <div class="page-header">
+                        <h1>OPC 创业者联盟</h1>
+                        <p>一个人就是一家公司。在这里分享想法、寻找资源、连接同行。</p>
+                    </div>
+                    
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <span class="stat-num" id="statMembers">0</span>
+                            <span class="stat-label">联盟成员</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-num" id="statIdeas">0</span>
+                            <span class="stat-label">想法分享</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-num" id="statResources">0</span>
+                            <span class="stat-label">资源收录</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-num" id="statProjects">0</span>
+                            <span class="stat-label">项目展示</span>
+                        </div>
+                    </div>
+
+                    <div class="home-grid">
+                        <div class="home-section">
+                            <div class="section-title-row">
+                                <h2>🔥 最新想法</h2>
+                                <a href="#" class="see-all" data-page="ideas">查看全部 →</a>
+                            </div>
+                            <div id="homeIdeas" class="ideas-list compact"></div>
+                        </div>
+                        <div class="home-sidebar-panels">
+                            <div class="panel">
+                                <h3>📌 每日一问</h3>
+                                <div class="daily-question" id="dailyQuestion"></div>
+                            </div>
+                            <div class="panel">
+                                <h3>🏆 活跃成员</h3>
+                                <div id="topMembers" class="top-members"></div>
+                            </div>
+                            <div class="panel">
+                                <h3>🔗 快速资源</h3>
+                                <div id="quickResources"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ideas Page -->
+                <div class="page" id="page-ideas">
+                    <div class="page-header">
+                        <h1>💡 想法广场</h1>
+                        <p>分享你的商业想法、创业灵感、行业洞察</p>
+                    </div>
+                    <div class="compose-box">
+                        <div class="compose-header">
+                            <div class="compose-avatar" id="composeAvatar">?</div>
+                            <textarea id="ideaInput" placeholder="分享一个想法、灵感或问题...&#10;好的想法值得被看见 ✨" rows="3"></textarea>
+                        </div>
+                        <div class="compose-footer">
+                            <div class="compose-options">
+                                <select id="ideaCategory">
+                                    <option value="idea">💡 商业想法</option>
+                                    <option value="insight">🔍 行业洞察</option>
+                                    <option value="question">❓ 提问</option>
+                                    <option value="experience">📖 经验分享</option>
+                                    <option value="tool">🛠️ 工具推荐</option>
+                                </select>
+                                <input type="text" id="ideaTags" placeholder="标签（逗号分隔）">
+                            </div>
+                            <button class="btn-primary" id="postIdea">发布</button>
+                        </div>
+                    </div>
+                    <div class="filter-bar">
+                        <button class="filter-btn active" data-filter="all">全部</button>
+                        <button class="filter-btn" data-filter="idea">💡 想法</button>
+                        <button class="filter-btn" data-filter="insight">🔍 洞察</button>
+                        <button class="filter-btn" data-filter="question">❓ 提问</button>
+                        <button class="filter-btn" data-filter="experience">📖 经验</button>
+                    </div>
+                    <div id="ideasList" class="ideas-list"></div>
+                </div>
+
+                <!-- Resources Page -->
+                <div class="page" id="page-resources">
+                    <div class="page-header">
+                        <h1>📚 资源库</h1>
+                        <p>OPC创业者的工具箱——经过验证的工具、模板、教程</p>
+                    </div>
+                    <div class="resource-add-bar">
+                        <button class="btn-outline" id="addResourceBtn">+ 分享资源</button>
+                    </div>
+                    <div class="resource-form hidden" id="resourceForm">
+                        <div class="form-row">
+                            <input type="text" id="resTitle" placeholder="资源名称">
+                            <input type="text" id="resUrl" placeholder="链接 URL">
+                        </div>
+                        <div class="form-row">
+                            <select id="resCategory">
+                                <option value="tool">🛠️ 工具</option>
+                                <option value="template">📄 模板</option>
+                                <option value="course">🎓 课程</option>
+                                <option value="book">📚 书籍</option>
+                                <option value="community">👥 社群</option>
+                                <option value="api">🔗 API</option>
+                            </select>
+                            <input type="text" id="resTags" placeholder="标签（逗号分隔）">
+                        </div>
+                        <textarea id="resDesc" placeholder="简短描述这个资源的价值..." rows="2"></textarea>
+                        <div class="form-actions">
+                            <button class="btn-primary" id="submitResource">提交</button>
+                            <button class="btn-ghost" id="cancelResource">取消</button>
+                        </div>
+                    </div>
+                    <div class="resource-categories">
+                        <button class="cat-btn active" data-cat="all">全部</button>
+                        <button class="cat-btn" data-cat="tool">🛠️ 工具</button>
+                        <button class="cat-btn" data-cat="template">📄 模板</button>
+                        <button class="cat-btn" data-cat="course">🎓 课程</button>
+                        <button class="cat-btn" data-cat="book">📚 书籍</button>
+                        <button class="cat-btn" data-cat="community">👥 社群</button>
+                        <button class="cat-btn" data-cat="api">🔗 API</button>
+                    </div>
+                    <div id="resourcesList" class="resources-grid"></div>
+                </div>
+
+                <!-- Members Page -->
+                <div class="page" id="page-members">
+                    <div class="page-header">
+                        <h1>👥 联盟成员</h1>
+                        <p>认识你的同行者，找到你的合作伙伴</p>
+                    </div>
+                    <div class="members-filter">
+                        <input type="text" placeholder="搜索成员..." id="memberSearch">
+                    </div>
+                    <div id="membersList" class="members-grid"></div>
+                </div>
+
+                <!-- Discussions Page -->
+                <div class="page" id="page-discussions">
+                    <div class="page-header">
+                        <h1>💬 讨论区</h1>
+                        <p>深度讨论、头脑风暴、案例分析</p>
+                    </div>
+                    <button class="btn-primary" id="newDiscussionBtn">发起讨论</button>
+                    <div class="discussion-form hidden" id="discussionForm">
+                        <input type="text" id="discTitle" placeholder="讨论标题">
+                        <textarea id="discContent" placeholder="详细描述你想讨论的内容..." rows="4"></textarea>
+                        <div class="form-actions">
+                            <button class="btn-primary" id="submitDiscussion">发布讨论</button>
+                            <button class="btn-ghost" id="cancelDiscussion">取消</button>
+                        </div>
+                    </div>
+                    <div id="discussionsList" class="discussions-list"></div>
+                </div>
+
+                <!-- Projects Page -->
+                <div class="page" id="page-projects">
+                    <div class="page-header">
+                        <h1>🛠️ 项目展示</h1>
+                        <p>展示你的OPC项目，获得反馈和关注</p>
+                    </div>
+                    <button class="btn-primary" id="newProjectBtn">展示项目</button>
+                    <div class="project-form hidden" id="projectForm">
+                        <div class="form-row">
+                            <input type="text" id="projName" placeholder="项目名称">
+                            <input type="text" id="projUrl" placeholder="项目链接">
+                        </div>
+                        <textarea id="projDesc" placeholder="描述你的项目..." rows="3"></textarea>
+                        <div class="form-row">
+                            <input type="text" id="projTech" placeholder="技术栈（逗号分隔）">
+                            <input type="text" id="projRevenue" placeholder="月收入（可选，如 $1K）">
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn-primary" id="submitProject">发布项目</button>
+                            <button class="btn-ghost" id="cancelProject">取消</button>
+                        </div>
+                    </div>
+                    <div id="projectsList" class="projects-grid"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Comment Modal -->
+    <div class="modal-overlay" id="commentModal">
+        <div class="modal comment-modal">
+            <button class="modal-close" id="closeCommentModal">&times;</button>
+            <div id="commentThreadContent"></div>
+            <div class="comment-input-row">
+                <input type="text" id="commentInput" placeholder="写下你的评论...">
+                <button class="btn-primary btn-sm" id="postComment">发送</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
