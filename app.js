@@ -207,6 +207,17 @@
         const dayIndex = Math.floor(Date.now() / 86400000) % DAILY_QUESTIONS.length;
         $('#dailyQuestion').textContent = DAILY_QUESTIONS[dayIndex];
 
+        // Weekly topic
+        if (typeof WEEKLY_TOPICS !== 'undefined' && WEEKLY_TOPICS.length) {
+            const weekIndex = Math.floor(Date.now() / (86400000 * 7)) % WEEKLY_TOPICS.length;
+            const topic = WEEKLY_TOPICS[weekIndex];
+            $('#weeklyTopic').innerHTML = `
+                <div style="font-weight:600;font-size:0.9rem;margin-bottom:6px;">${topic.title}</div>
+                <div style="font-size:0.82rem;color:var(--text-dim);line-height:1.6;margin-bottom:8px;">${topic.desc}</div>
+                <div style="display:flex;gap:4px;flex-wrap:wrap;">${topic.tags.map(t => `<span class="idea-tag">#${t}</span>`).join('')}</div>
+            `;
+        }
+
         // Top members
         const members = load('opc_members', generateFakeMembers());
         const top = [...members].sort((a, b) => b.score - a.score).slice(0, 5);

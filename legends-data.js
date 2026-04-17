@@ -128,7 +128,7 @@ const LEGENDS = [
         avatar: cartoonAvatar("pieter", "#6c5ce7", "#a29bfe"),
         avatarBg: "linear-gradient(135deg, #6c5ce7, #a29bfe)",
         bio: "Dutch developer who built 70+ products as a one-person company. Revenue, Nomad List, Remote OK, and Photo AI generate $3.5M+/year. The godfather of the build-in-public movement.",
-        bioZh: "荷兰开发者，以一人公司模式打造了70+个产品。Revenue、Nomad List、Remote OK和Photo AI年收入超过350万美元。"公开构建"运动的教父。",
+        bioZh: "荷兰开发者，以一人公司模式打造了70+个产品。Revenue、Nomad List、Remote OK和Photo AI年收入超过350万美元。'公开构建'运动的教父。",
         metrics: [
             { value: "$3.5M+", label: "Annual Revenue", labelZh: "年收入" },
             { value: "70+", label: "Products Shipped", labelZh: "已发布产品" },
@@ -814,6 +814,253 @@ const LEGENDS = [
         businessModel: "Affiliate + Courses + Podcast Sponsorship",
         businessModelZh: "联盟营销 + 课程 + 播客赞助",
         tags: ["Podcasting", "Affiliate", "Transparency", "SPI"]
+    },
+    // ===== 亚洲 / 中国代表 =====
+    {
+        id: "tiny-fool",
+        name: "Tiny (tinyfool)",
+        nameZh: "Tiny（tinyfool）",
+        role: "Developer Community Builder",
+        roleZh: "独立开发者社区缔造者",
+        category: ["saas", "creator"],
+        avatar: cartoonAvatar("tiny", "#e17055", "#fdcb6e"),
+        avatarBg: "linear-gradient(135deg, #e17055, #fdcb6e)",
+        bio: "Chinese indie developer who built a developer community platform generating $100K+/year. Proves that solo founders in China can build global products.",
+        bioZh: "中国独立开发者，一人打造开发者社区平台，年收入超10万美元。证明中国的独立创业者也能做出全球化产品。",
+        metrics: [
+            { value: "$100K+", label: "Annual Revenue", labelZh: "年收入" },
+            { value: "5+", label: "Products", labelZh: "产品数" },
+            { value: "10+", label: "Years Solo", labelZh: "独立年数" },
+            { value: "1", label: "Person", labelZh: "一个人" }
+        ],
+        website: "https://blog.tinyfool.org",
+        twitter: "",
+        quote: "独立开发最重要的是找到自己的节奏，不要被风口带跑。",
+        quoteZh: "独立开发最重要的是找到自己的节奏，不要被风口带跑。",
+        philosophy: [
+            "找到自己的技术优势，不要盲目追热点",
+            "一个人最大的优势是决策速度——没有会议、没有审批",
+            "用技术壁垒替代资金壁垒",
+            "持续输出内容建立个人品牌",
+            "中国创业者出海是巨大机会"
+        ],
+        philosophyZh: [
+            "找到自己的技术优势，不要盲目追热点",
+            "一个人最大的优势是决策速度——没有会议、没有审批",
+            "用技术壁垒替代资金壁垒",
+            "持续输出内容建立个人品牌",
+            "中国创业者出海是巨大机会"
+        ],
+        keyInsight: "Tiny证明了在中国做独立开发是可行的。关键洞察：不要和巨头硬碰硬，找垂直领域深耕。一个人+技术壁垒=可持续的商业模式。",
+        keyInsightZh: "Tiny证明了在中国做独立开发是可行的。关键洞察：不要和巨头硬碰硬，找垂直领域深耕。一个人+技术壁垒=可持续的商业模式。",
+        businessModel: "Community + SaaS + Content",
+        businessModelZh: "社区 + SaaS + 内容",
+        tags: ["中国", "独立开发", "社区", "出海"]
+    },
+    {
+        id: "clay-he",
+        name: "何夕 (Clay He)",
+        nameZh: "何夕",
+        role: "YC Partner • Indie Hacker Advocate",
+        roleZh: "YC中国合伙人 • 独立开发者布道者",
+        category: ["consulting", "content"],
+        avatar: cartoonAvatar("clay", "#6c5ce7", "#a29bfe"),
+        avatarBg: "linear-gradient(135deg, #6c5ce7, #a29bfe)",
+        bio: "Former YC China partner who champions Chinese indie hackers. Turned his personal brand into a bridge between Chinese builders and global startup ecosystem.",
+        bioZh: "前YC中国合伙人，中国独立开发者的支持者。将个人品牌打造成中国创业者与全球创业生态的桥梁。",
+        metrics: [
+            { value: "100K+", label: "Followers", labelZh: "关注者" },
+            { value: "50+", label: "Companies Advised", labelZh: "辅导企业" },
+            { value: "10+", label: "Years in Tech", labelZh: "科技行业年数" },
+            { value: "1", label: "Voice", labelZh: "一个声音" }
+        ],
+        website: "https://twitter.com/clayhe",
+        twitter: "https://twitter.com/clayhe",
+        quote: "中国不缺好的工程师，缺的是好的独立创业者。",
+        quoteZh: "中国不缺好的工程师，缺的是好的独立创业者。",
+        philosophy: [
+            "个人品牌是最好的杠杆——免费、不可替代",
+            "独立创业的核心是「想清楚自己要什么」",
+            "中国开发者出海的优势是工程能力+成本效率",
+            "用内容吸引同频的人，比销售有效100倍",
+            "做有复利的事情：写文章、建社区、投资"
+        ],
+        philosophyZh: [
+            "个人品牌是最好的杠杆——免费、不可替代",
+            "独立创业的核心是「想清楚自己要什么」",
+            "中国开发者出海的优势是工程能力+成本效率",
+            "用内容吸引同频的人，比销售有效100倍",
+            "做有复利的事情：写文章、建社区、投资"
+        ],
+        keyInsight: "何夕的影响力来自于持续输出：他每天在社交媒体分享创业思考，建立了一个以他为中心的独立创业者网络。这证明了在中国，个人品牌+技术背景=无限可能。",
+        keyInsightZh: "何夕的影响力来自于持续输出：他每天在社交媒体分享创业思考，建立了一个以他为中心的独立创业者网络。这证明了在中国，个人品牌+技术背景=无限可能。",
+        businessModel: "Advisory + Investing + Content",
+        businessModelZh: "咨询 + 投资 + 内容",
+        tags: ["中国", "YC", "个人品牌", "投资"]
+    },
+    {
+        id: "susan-su",
+        name: "Susan Su",
+        nameZh: "苏珊·苏",
+        role: "Portfolio Partner • Solopreneur Creator",
+        roleZh: "投资合伙人 • 独立创业者创作者",
+        category: ["finance", "content"],
+        avatar: cartoonAvatar("susan", "#fd79a8", "#e84393"),
+        avatarBg: "linear-gradient(135deg, #fd79a8, #e84393)",
+        bio: "Sound Ventures partner who built a massive Twitter following by sharing startup growth insights. Asian-American woman proving that diverse founders can build world-class brands.",
+        bioZh: "Sound Ventures合伙人，通过分享创业增长见解建立了大量推特粉丝。亚裔女性证明了多元背景的创始人也能打造世界级品牌。",
+        metrics: [
+            { value: "200K+", label: "Twitter Followers", labelZh: "推特粉丝" },
+            { value: "$1B+", label: "Fund AUM", labelZh: "基金管理规模" },
+            { value: "100+", label: "Companies Advised", labelZh: "辅导企业" },
+            { value: "0", label: "Co-founders", labelZh: "联合创始人" }
+        ],
+        website: "https://twitter.com/susanthesuark",
+        twitter: "https://twitter.com/susanthesuark",
+        quote: "Build your brand before you need it.",
+        quoteZh: "在你需要个人品牌之前就先建立它。",
+        philosophy: [
+            "个人品牌是0成本的最强杠杆",
+            "增长黑客思维应用于个人品牌建设",
+            "亚洲创业者需要在西方建立话语权",
+            "免费分享知识→建立信任→获得机会",
+            "多样性不是口号，是竞争优势"
+        ],
+        philosophyZh: [
+            "个人品牌是0成本的最强杠杆",
+            "增长黑客思维应用于个人品牌建设",
+            "亚洲创业者需要在西方建立话语权",
+            "免费分享知识→建立信任→获得机会",
+            "多样性不是口号，是竞争优势"
+        ],
+        keyInsight: "Susan证明了在投资圈，个人品牌的影响力可以超越机构品牌。她的推特影响力让她获得了比传统VC合伙人更多的deal flow。对OPC的启示：你不需要一个公司来拥有影响力。",
+        keyInsightZh: "Susan证明了在投资圈，个人品牌的影响力可以超越机构品牌。她的推特影响力让她获得了比传统VC合伙人更多的deal flow。对OPC的启示：你不需要一个公司来拥有影响力。",
+        businessModel: "VC + Content + Advisory",
+        businessModelZh: "风投 + 内容 + 咨询",
+        tags: ["投资", "增长", "个人品牌", "多样性"]
+    },
+    {
+        id: "kong-fanli",
+        name: "孔繁利",
+        nameZh: "孔繁利",
+        role: "Indie SaaS Founder • China",
+        roleZh: "独立SaaS创始人 • 中国",
+        category: ["saas"],
+        avatar: cartoonAvatar("kong", "#00d68f", "#4ecdc4"),
+        avatarBg: "linear-gradient(135deg, #00d68f, #4ecdc4)",
+        bio: "Chinese developer who built profitable SaaS products serving global markets from China. Demonstrates that geographic arbitrage + technical skills = OPC success.",
+        bioZh: "中国开发者，从中国服务全球市场打造了盈利的SaaS产品。证明了地理套利+技术能力=OPC成功。",
+        metrics: [
+            { value: "$50K+", label: "Monthly Revenue", labelZh: "月收入" },
+            { value: "3", label: "SaaS Products", labelZh: "SaaS产品" },
+            { value: "50+", label: "Countries Served", labelZh: "服务国家" },
+            { value: "1", label: "Founder", labelZh: "创始人" }
+        ],
+        website: "#",
+        twitter: "",
+        quote: "在中国做SaaS，面向全球市场，一个人就够了。",
+        quoteZh: "在中国做SaaS，面向全球市场，一个人就够了。",
+        philosophy: [
+            "中国开发者出海的黄金时代",
+            "选对市场比做对产品更重要",
+            "Stripe Atlas + Vercel = 全球化基础设施",
+            "用英文内容获取海外用户",
+            "一个人=零沟通成本=极致效率"
+        ],
+        philosophyZh: [
+            "中国开发者出海的黄金时代",
+            "选对市场比做对产品更重要",
+            "Stripe Atlas + Vercel = 全球化基础设施",
+            "用英文内容获取海外用户",
+            "一个人=零沟通成本=极致效率"
+        ],
+        keyInsight: "孔繁利代表了一类新兴的中国OPC创业者：在国内开发，面向全球市场，用Stripe收款，用Vercel部署。这种模式的优势：中国的生活成本 + 全球的付费能力 = 极高利润率。",
+        keyInsightZh: "孔繁利代表了一类新兴的中国OPC创业者：在国内开发，面向全球市场，用Stripe收款，用Vercel部署。这种模式的优势：中国的生活成本 + 全球的付费能力 = 极高利润率。",
+        businessModel: "SaaS (Global Market)",
+        businessModelZh: "SaaS（全球市场）",
+        tags: ["中国", "出海", "SaaS", "地理套利"]
+    },
+    {
+        id: "junyu-wu",
+        name: "吴俊宇",
+        nameZh: "吴俊宇",
+        role: "Tech Writer • Independent Analyst",
+        roleZh: "科技作者 • 独立分析师",
+        category: ["content"],
+        avatar: cartoonAvatar("junyu", "#0984e3", "#74b9ff"),
+        avatarBg: "linear-gradient(135deg, #0984e3, #74b9ff)",
+        bio: "Independent Chinese tech writer who built a premium newsletter and consulting practice through deep industry analysis. Proves that content alone can sustain a one-person company.",
+        bioZh: "独立中国科技作者，通过深度行业分析打造了付费通讯和咨询业务。证明了内容本身就能支撑一人公司。",
+        metrics: [
+            { value: "¥100万+", label: "Annual Revenue", labelZh: "年收入" },
+            { value: "10万+", label: "Subscribers", labelZh: "订阅者" },
+            { value: "5+", label: "Years Writing", labelZh: "写作年数" },
+            { value: "0", label: "Employees", labelZh: "员工" }
+        ],
+        website: "#",
+        twitter: "",
+        quote: "深度内容永远有市场，关键是找到你的受众。",
+        quoteZh: "深度内容永远有市场，关键是找到你的受众。",
+        philosophy: [
+            "在中国做付费内容是可行的——关键是深度",
+            "微信公众号+知识星球=中国的内容变现闭环",
+            "独立分析的价值在于没有利益冲突",
+            "写作是最好的思考工具",
+            "个人品牌建立后，变现方式自然出现"
+        ],
+        philosophyZh: [
+            "在中国做付费内容是可行的——关键是深度",
+            "微信公众号+知识星球=中国的内容变现闭环",
+            "独立分析的价值在于没有利益冲突",
+            "写作是最好的思考工具",
+            "个人品牌建立后，变现方式自然出现"
+        ],
+        keyInsight: "吴俊宇代表了中国版的James Clear——通过持续输出高质量行业分析，建立了付费读者群。他的模式：免费文章引流→知识星球付费→企业咨询变现。一套完整的内容OPC闭环。",
+        keyInsightZh: "吴俊宇代表了中国版的James Clear——通过持续输出高质量行业分析，建立了付费读者群。他的模式：免费文章引流→知识星球付费→企业咨询变现。一套完整的内容OPC闭环。",
+        businessModel: "Newsletter + Consulting + Community",
+        businessModelZh: "通讯 + 咨询 + 社群",
+        tags: ["中国", "内容", "写作", "付费订阅"]
+    },
+    {
+        id: "liu-xiaopai",
+        name: "刘小排",
+        nameZh: "刘小排",
+        role: "Indie Developer • Vibe Coding Pioneer",
+        roleZh: "独立开发者 • 氛围编码先驱",
+        category: ["saas", "creator"],
+        avatar: cartoonAvatar("liuxp", "#fdcb6e", "#e17055"),
+        avatarBg: "linear-gradient(135deg, #fdcb6e, #e17055)",
+        bio: "Chinese indie developer who champions the 'vibe coding' movement. Builds and ships products rapidly using AI, proving that speed of iteration is the new competitive advantage.",
+        bioZh: "中国独立开发者，'氛围编码'运动的倡导者。使用AI快速构建和发布产品，证明迭代速度是新的竞争优势。",
+        metrics: [
+            { value: "¥30K+", label: "Monthly Revenue", labelZh: "月收入" },
+            { value: "10+", label: "Products Shipped", labelZh: "已发布产品" },
+            { value: "100K+", label: "Followers", labelZh: "关注者" },
+            { value: "0", label: "Team Members", labelZh: "团队成员" }
+        ],
+        website: "#",
+        twitter: "",
+        quote: "用AI写代码，用直觉做产品，用速度打败一切。",
+        quoteZh: "用AI写代码，用直觉做产品，用速度打败一切。",
+        philosophy: [
+            "AI时代，一个人=一个团队",
+            "vibe coding:不写完美代码，写能跑的代码",
+            "每周发布一个产品，用数量换质量",
+            "中国市场的机会在垂直场景",
+            "公开构建是最好的营销——免费、真实、有效"
+        ],
+        philosophyZh: [
+            "AI时代，一个人=一个团队",
+            "vibe coding:不写完美代码，写能跑的代码",
+            "每周发布一个产品，用数量换质量",
+            "中国市场的机会在垂直场景",
+            "公开构建是最好的营销——免费、真实、有效"
+        ],
+        keyInsight: "刘小排代表了中国版的Marc Lou——用AI工具（Cursor/Claude）极快速地构建产品。他的哲学：在AI时代，代码不再是壁垒，速度和洞察力才是。一个人用AI一天能做完过去一个团队一周的工作。",
+        keyInsightZh: "刘小排代表了中国版的Marc Lou——用AI工具（Cursor/Claude）极快速地构建产品。他的哲学：在AI时代，代码不再是壁垒，速度和洞察力才是。一个人用AI一天能做完过去一个团队一周的工作。",
+        businessModel: "SaaS Portfolio + AI Tools",
+        businessModelZh: "SaaS组合 + AI工具",
+        tags: ["中国", "AI", "氛围编码", "Ship Fast"]
     }
 ];
 
