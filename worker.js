@@ -26,6 +26,8 @@ const MIMO = {
 
 // 允许的来源
 const ALLOWED_ORIGINS = [
+    'https://opc-alliance.cn',
+    'https://www.opc-alliance.cn',
     'https://mokangmedical.github.io',
     'http://localhost:8080',
     'http://127.0.0.1:8080',
