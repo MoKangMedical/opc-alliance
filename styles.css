@@ -1236,3 +1236,88 @@ select { cursor: pointer; }
     color: var(--text-dim);
     white-space: pre-line;
 }
+
+/* ---- Membership ---- */
+.membership-panel { overflow: visible; }
+.membership-tiers { display: flex; flex-direction: column; gap: 10px; }
+.tier-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    position: relative;
+}
+.tier-card.tier-pro { border-color: var(--accent); background: var(--accent-glow); }
+.tier-card.tier-founder { border-color: var(--gold); background: rgba(240, 192, 64, 0.05); }
+.tier-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+.tier-price { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--accent-light); margin-bottom: 8px; }
+.tier-price small { font-size: 0.7rem; color: var(--text-muted); }
+.tier-card.tier-founder .tier-price { color: var(--gold); }
+.tier-features { list-style: none; padding: 0; margin-bottom: 10px; }
+.tier-features li { font-size: 0.78rem; color: var(--text-dim); padding: 2px 0; padding-left: 14px; position: relative; }
+.tier-features li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-size: 0.7rem; }
+.tier-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: var(--green);
+    color: #fff;
+}
+.tier-upgrade { width: 100%; margin-top: 4px; }
+
+/* Subscribe */
+.subscribe-form { display: flex; gap: 8px; }
+.subscribe-form input { flex: 1; font-size: 0.82rem; padding: 8px 12px; }
+
+/* WeChat Pay Modal */
+.wechat-pay-modal { max-width: 420px; text-align: center; }
+.pay-header { margin-bottom: 24px; }
+.pay-icon { font-size: 2.5rem; margin-bottom: 8px; }
+.pay-header h3 { font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 6px; }
+.pay-amount { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--accent-light); }
+.pay-qr-section { margin-bottom: 20px; }
+.qr-frame {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 20px;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.qr-inner { text-align: center; }
+.pay-steps { text-align: left; }
+.pay-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+}
+.pay-step span {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+.pay-note {
+    background: var(--bg-surface);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+.pay-note p { margin: 4px 0; }

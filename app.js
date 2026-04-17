@@ -760,6 +760,63 @@
     });
 
     // ========================================
+    // Membership & Payments
+    // ========================================
+
+    // WeChat Pay modal
+    window.showWeChatPay = function(tier) {
+        const modal = document.getElementById('wechatPayModal');
+        const title = document.getElementById('payTitle');
+        const amount = document.getElementById('payAmount');
+
+        if (tier === 'pro') {
+            title.textContent = '💎 开通 Pro 会员';
+            amount.innerHTML = '¥99<small>/年</small>';
+        } else {
+            title.textContent = '👑 开通创始会员';
+            amount.innerHTML = '¥299<small>/永久</small>';
+        }
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
+
+    document.getElementById('closeWechatPay').addEventListener('click', () => {
+        document.getElementById('wechatPayModal').classList.remove('active');
+        document.body.style.overflow = '';
+    });
+    document.getElementById('wechatPayModal').addEventListener('click', (e) => {
+        if (e.target.id === 'wechatPayModal') {
+            document.getElementById('wechatPayModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Email subscription
+    document.getElementById('subscribeBtn').addEventListener('click', () => {
+        const email = document.getElementById('subscribeEmail').value.trim();
+        const resultEl = document.getElementById('subscribeResult');
+
+        if (!email || !email.includes('@')) {
+            resultEl.textContent = '❌ 请输入有效的邮箱地址';
+            resultEl.style.color = 'var(--red)';
+            return;
+        }
+
+        const subs = JSON.parse(localStorage.getItem('opc_subscribers') || '[]');
+        if (subs.includes(email)) {
+            resultEl.textContent = '✅ 已订阅过了';
+            resultEl.style.color = 'var(--green)';
+            return;
+        }
+        subs.push(email);
+        localStorage.setItem('opc_subscribers', JSON.stringify(subs));
+
+        resultEl.textContent = '✅ 订阅成功！每周五发送OPC周报';
+        resultEl.style.color = 'var(--green)';
+        document.getElementById('subscribeEmail').value = '';
+    });
+
+    // ========================================
     // Legends / Hall of Fame
     // ========================================
 

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://opc-alliance.cn/sitemap.xml
