@@ -33,43 +33,42 @@ const MimoAI = (function() {
             max_tokens: 2000
         };
 
-        // Try direct first, then proxy
-        const strategies = [
-            { url: `${CONFIG.baseUrl}/chat/completions`, proxy: false },
-            { url: `${CONFIG.baseUrl}/chat/completions`, proxy: true }
-        ];
-
-        for (const strategy of strategies) {
+        // Strategy 1: Proxy (via Cloudflare Worker /v1/ path)
+        const proxyBase = localStorage.getItem('opc_sm_proxy') || '';
+        if (proxyBase) {
             try {
-                let fetchUrl = strategy.url;
-                const headers = {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${CONFIG.apiKey}`
-                };
-
-                if (strategy.proxy) {
-                    const proxyBase = localStorage.getItem('opc_sm_proxy') || '';
-                    if (!proxyBase) continue;
-                    fetchUrl = `${proxyBase}?path=/v1/chat/completions`;
-                    delete headers['Authorization']; // proxy handles auth
-                }
-
-                const resp = await fetch(fetchUrl, {
+                // Worker proxy: /v1/chat/completions 直接转发到 MIMO
+                const proxyUrl = proxyBase.replace(/\/?$/, '') + '/v1/chat/completions';
+                const resp = await fetch(proxyUrl, {
                     method: 'POST',
-                    headers,
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(body)
                 });
-
                 const data = await resp.json();
                 if (data.choices && data.choices[0]) {
-                    return { ok: true, content: data.choices[0].message.content, via: strategy.proxy ? 'proxy' : 'direct' };
+                    return { ok: true, content: data.choices[0].message.content, via: 'proxy' };
                 }
-            } catch(e) {
-                continue;
-            }
+            } catch(e) { /* fall through to direct */ }
         }
 
-        return { ok: false, error: '无法连接MIMO API，请检查网络或配置代理' };
+        // Strategy 2: Direct call (if CORS extension installed)
+        try {
+            const resp = await fetch(`${CONFIG.baseUrl}/chat/completions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${CONFIG.apiKey}`
+                },
+                body: JSON.stringify(body)
+            });
+            const data = await resp.json();
+            if (data.choices && data.choices[0]) {
+                return { ok: true, content: data.choices[0].message.content, via: 'direct' };
+            }
+            return { ok: false, error: data.error?.message || 'API返回异常' };
+        } catch(e) {
+            return { ok: false, error: 'CORS_BLOCKED' };
+        }
     }
 
     // ---- OPC AI Advisor ----
@@ -117,12 +116,11 @@ ${LEGENDS_WISDOM}
         const result = await chat(systemPrompt, `请评估这个创业想法：\n\n${idea}`, 0.3);
         if (result.ok) {
             try {
-                // Try to extract JSON from the response
                 const jsonMatch = result.content.match(/\{[\s\S]*\}/);
                 if (jsonMatch) {
                     result.evaluation = JSON.parse(jsonMatch[0]);
                 }
-            } catch(e) { /* non-JSON response is fine */ }
+            } catch(e) { /* non-JSON is fine */ }
         }
         return result;
     }
