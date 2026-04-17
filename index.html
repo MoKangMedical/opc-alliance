@@ -86,6 +86,10 @@
                     <span class="nav-icon">🏆</span>
                     <span>名人堂</span>
                 </a>
+                <a href="#" class="nav-item" data-page="ai">
+                    <span class="nav-icon">🤖</span>
+                    <span>AI 顾问</span>
+                </a>
                 <div class="nav-divider"></div>
                 <a href="#" class="nav-item" data-page="secondme">
                     <span class="nav-icon">🧠</span>
@@ -390,6 +394,70 @@
                     <div id="projectsList" class="projects-grid"></div>
                 </div>
 
+                <!-- AI Advisor Page -->
+                <div class="page" id="page-ai">
+                    <div class="page-header">
+                        <h1>🤖 OPC AI 顾问</h1>
+                        <p>基于18位传奇创业者的商业智慧，AI为你提供建议</p>
+                    </div>
+
+                    <div class="ai-tabs">
+                        <button class="sm-tab active" data-ai-tab="advisor">💬 AI 顾问</button>
+                        <button class="sm-tab" data-ai-tab="evaluator">🎯 想法评估</button>
+                        <button class="sm-tab" data-ai-tab="daily">🔥 每日推荐</button>
+                    </div>
+
+                    <!-- AI Advisor Tab -->
+                    <div class="ai-tab-content active" id="aiAdvisor">
+                        <div class="ai-chat-container">
+                            <div class="ai-chat-messages" id="advisorMessages">
+                                <div class="ai-welcome">
+                                    <div class="ai-avatar-big">🤖</div>
+                                    <h3>你好！我是OPC AI顾问</h3>
+                                    <p>我的知识库来自18位全球最成功的独立创业者。问我任何关于一人公司创业的问题吧！</p>
+                                    <div class="ai-quick-qs">
+                                        <button class="ai-quick-q" data-q="一人公司最适合什么类型的业务？">💡 最适合OPC的业务</button>
+                                        <button class="ai-quick-q" data-q="如何用0成本开始一个SaaS产品？">🚀 零成本启动SaaS</button>
+                                        <button class="ai-quick-q" data-q="独立开发者如何找到第一批用户？">👥 获取第一批用户</button>
+                                        <button class="ai-quick-q" data-q="一个人怎么同时做产品和营销？">⚡ 产品+营销平衡</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ai-chat-input">
+                                <textarea id="advisorInput" placeholder="问一个关于OPC创业的问题..." rows="2"></textarea>
+                                <button class="btn-primary" id="advisorSend">发送</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Idea Evaluator Tab -->
+                    <div class="ai-tab-content" id="aiEvaluator">
+                        <div class="evaluator-container">
+                            <div class="evaluator-input">
+                                <h3>🎯 想法评估器</h3>
+                                <p class="text-dim">提交你的创业想法，AI从5个维度打分并给出建议</p>
+                                <textarea id="ideaEvalInput" placeholder="描述你的创业想法...&#10;&#10;例如：我想做一个AI驱动的简历优化工具，帮助求职者自动优化简历关键词，提高通过率。目标用户是互联网行业的求职者。" rows="5"></textarea>
+                                <button class="btn-primary" id="evalSubmit">🔍 评估这个想法</button>
+                            </div>
+                            <div class="evaluator-result" id="evalResult"></div>
+                        </div>
+                    </div>
+
+                    <!-- Daily Recommendation Tab -->
+                    <div class="ai-tab-content" id="aiDaily">
+                        <div class="daily-container">
+                            <div id="dailyContent">
+                                <div class="ai-welcome">
+                                    <div class="ai-avatar-big">🔥</div>
+                                    <h3>每日 OPC 推荐</h3>
+                                    <p>AI每天为你生成一条基于传奇创业者智慧的行动建议</p>
+                                    <button class="btn-primary" id="dailyGenerate">获取今日推荐</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Legends / Hall of Fame Page -->
                 <div class="page" id="page-legends">
                     <div class="page-header">
@@ -433,6 +501,7 @@
     <script src="data.js"></script>
     <script src="legends-data.js"></script>
     <script src="secondme.js"></script>
+    <script src="ai.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

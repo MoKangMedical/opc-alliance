@@ -636,6 +636,130 @@
     if (user) renderAll();
 
     // ========================================
+    // AI Advisor
+    // ========================================
+
+    // AI tab switching
+    document.querySelectorAll('[data-ai-tab]').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('[data-ai-tab]').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.ai-tab-content').forEach(c => c.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('ai' + tab.dataset.aiTab.charAt(0).toUpperCase() + tab.dataset.aiTab.slice(1)).classList.add('active');
+        });
+    });
+
+    // Chat message helpers
+    function addChatMessage(container, role, text) {
+        const div = document.createElement('div');
+        div.className = `ai-msg ${role}`;
+        div.innerHTML = `
+            <div class="ai-msg-avatar">${role === 'user' ? '👤' : '🤖'}</div>
+            <div class="ai-msg-bubble ${role === 'assistant' && !text ? 'thinking' : ''}">${text || '思考中...'}</div>
+        `;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+        return div;
+    }
+
+    // Advisor chat
+    async function sendAdvisorMessage(question) {
+        const container = document.getElementById('advisorMessages');
+        // Remove welcome if exists
+        const welcome = container.querySelector('.ai-welcome');
+        if (welcome) welcome.remove();
+
+        addChatMessage(container, 'user', question);
+        const thinkingMsg = addChatMessage(container, 'assistant', '');
+
+        const result = await MimoAI.askAdvisor(question);
+        const bubble = thinkingMsg.querySelector('.ai-msg-bubble');
+
+        if (result.ok) {
+            bubble.textContent = result.content;
+            bubble.classList.remove('thinking');
+        } else {
+            bubble.textContent = '⚠️ ' + (result.error || '连接失败，请检查网络');
+            bubble.classList.remove('thinking');
+        }
+    }
+
+    document.getElementById('advisorSend').addEventListener('click', () => {
+        const input = document.getElementById('advisorInput');
+        const q = input.value.trim();
+        if (!q) return;
+        input.value = '';
+        sendAdvisorMessage(q);
+    });
+
+    document.getElementById('advisorInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            document.getElementById('advisorSend').click();
+        }
+    });
+
+    // Quick questions
+    document.querySelectorAll('.ai-quick-q').forEach(btn => {
+        btn.addEventListener('click', () => sendAdvisorMessage(btn.dataset.q));
+    });
+
+    // Idea Evaluator
+    document.getElementById('evalSubmit').addEventListener('click', async () => {
+        const input = document.getElementById('ideaEvalInput');
+        const idea = input.value.trim();
+        if (!idea) return;
+
+        const resultEl = document.getElementById('evalResult');
+        resultEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">🔍 AI正在评估你的想法...</div>';
+        resultEl.classList.add('active');
+
+        const result = await MimoAI.evaluateIdea(idea);
+
+        if (result.ok && result.evaluation) {
+            const ev = result.evaluation;
+            const scoreClass = (v) => v >= 7 ? 'high' : v >= 4 ? 'mid' : 'low';
+            const totalClass = scoreClass(ev.total);
+
+            resultEl.innerHTML = `
+                <div class="eval-scores">
+                    ${Object.entries(ev.scores || {}).map(([key, val]) => {
+                        const labels = { solo: '一人可执行', revenue: '变现潜力', speed: '启动速度', scale: '可扩展性', moat: '护城河' };
+                        return `<div class="eval-score-item"><span class="eval-score-val ${scoreClass(val)}">${val}</span><span class="eval-score-label">${labels[key] || key}</span></div>`;
+                    }).join('')}
+                </div>
+                <div class="eval-total">
+                    <span class="eval-total-score ${totalClass}">${ev.total}</span>
+                    <span class="eval-total-label">综合评分 / 10</span>
+                    <div class="eval-verdict">${ev.verdict || ''}</div>
+                </div>
+                ${ev.strengths?.length ? `<div class="eval-section strengths"><h4>✅ 优势</h4><ul>${ev.strengths.map(s => `<li>${s}</li>`).join('')}</ul></div>` : ''}
+                ${ev.risks?.length ? `<div class="eval-section risks"><h4>⚠️ 风险</h4><ul>${ev.risks.map(r => `<li>${r}</li>`).join('')}</ul></div>` : ''}
+                ${ev.suggestions?.length ? `<div class="eval-section suggestions"><h4>💡 建议</h4><ul>${ev.suggestions.map(s => `<li>${s}</li>`).join('')}</ul></div>` : ''}
+                ${ev.similarLegends?.length ? `<div class="eval-section"><h4>🏆 类似成功人物</h4><div class="eval-legend-tags">${ev.similarLegends.map(l => `<span class="eval-legend-tag">${l}</span>`).join('')}</div></div>` : ''}
+            `;
+        } else if (result.ok) {
+            // Non-JSON response, show raw
+            resultEl.innerHTML = `<div class="daily-card">${result.content}</div>`;
+        } else {
+            resultEl.innerHTML = `<div style="text-align:center;padding:40px;color:var(--red);">⚠️ ${result.error || '评估失败'}</div>`;
+        }
+    });
+
+    // Daily Recommendation
+    document.getElementById('dailyGenerate').addEventListener('click', async () => {
+        const container = document.getElementById('dailyContent');
+        container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">🔥 AI正在生成今日推荐...</div>';
+
+        const result = await MimoAI.getDailyRecommendation();
+        if (result.ok) {
+            container.innerHTML = `<div class="daily-card">${result.content}</div>`;
+        } else {
+            container.innerHTML = `<div style="text-align:center;padding:40px;color:var(--red);">⚠️ ${result.error || '生成失败'}</div>`;
+        }
+    });
+
+    // ========================================
     // Legends / Hall of Fame
     // ========================================
 
