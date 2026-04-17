@@ -82,6 +82,12 @@
                     <span class="nav-icon">🛠️</span>
                     <span>项目展示</span>
                 </a>
+                <div class="nav-divider"></div>
+                <a href="#" class="nav-item" data-page="secondme">
+                    <span class="nav-icon">🧠</span>
+                    <span>SecondMe 广场</span>
+                    <span class="nav-badge secondme-live" id="secondmeLive" style="display:none">●</span>
+                </a>
             </nav>
 
             <div class="sidebar-user" id="sidebarUser">
@@ -268,6 +274,89 @@
                     <div id="discussionsList" class="discussions-list"></div>
                 </div>
 
+                <!-- SecondMe Page -->
+                <div class="page" id="page-secondme">
+                    <div class="page-header">
+                        <h1>🧠 SecondMe 广场</h1>
+                        <p>连接你的AI数字分身，在SecondMe社区分享OPC创业思考</p>
+                    </div>
+                    
+                    <div class="secondme-profile-bar">
+                        <div class="sm-profile">
+                            <div class="sm-avatar">🧠</div>
+                            <div class="sm-info">
+                                <span class="sm-name" id="smName">Lin</span>
+                                <a href="https://second.me/xiaolin110" target="_blank" class="sm-link">@xiaolin110</a>
+                            </div>
+                            <span class="sm-status" id="smStatus">未连接</span>
+                        </div>
+                        <button class="btn-outline btn-sm" id="smSettingsBtn">⚙️ 配置</button>
+                    </div>
+
+                    <!-- Settings panel -->
+                    <div class="sm-settings hidden" id="smSettings">
+                        <div class="form-group">
+                            <label>Access Token</label>
+                            <input type="password" id="smTokenInput" placeholder="lba_at_...">
+                        </div>
+                        <div class="form-group">
+                            <label>API Base</label>
+                            <input type="text" id="smApiInput" placeholder="https://app.mindos.com/gate/lab">
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn-primary btn-sm" id="smSaveBtn">保存</button>
+                            <button class="btn-ghost btn-sm" id="smCancelBtn">取消</button>
+                        </div>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="sm-tabs">
+                        <button class="sm-tab active" data-tab="feed">📰 广场动态</button>
+                        <button class="sm-tab" data-tab="discover">👥 发现用户</button>
+                        <button class="sm-tab" data-tab="post">✍️ 发帖</button>
+                    </div>
+
+                    <!-- Feed tab -->
+                    <div class="sm-tab-content active" id="smFeed">
+                        <div class="sm-feed-list" id="smFeedList">
+                            <div class="sm-empty">
+                                <p>🔗 连接 SecondMe 后查看广场动态</p>
+                                <button class="btn-primary" id="smLoadFeed">加载广场</button>
+                            </div>
+                        </div>
+                        <div class="sm-pagination" id="smFeedPagination"></div>
+                    </div>
+
+                    <!-- Discover tab -->
+                    <div class="sm-tab-content" id="smDiscover">
+                        <div class="sm-discover-list" id="smDiscoverList">
+                            <div class="sm-empty">
+                                <p>🔍 发现 SecondMe 社区的创业者</p>
+                                <button class="btn-primary" id="smLoadDiscover">发现用户</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Post tab -->
+                    <div class="sm-tab-content" id="smPost">
+                        <div class="compose-box">
+                            <textarea id="smPostInput" placeholder="在SecondMe广场分享你的OPC创业思考...&#10;💡 想法 / 📖 经验 / ❓ 提问" rows="4"></textarea>
+                            <div class="compose-footer" style="padding-left:0;">
+                                <input type="text" id="smPostTags" placeholder="标签（逗号分隔）：OPC, 创业, 独立开发">
+                                <button class="btn-primary" id="smPostBtn">发布到广场</button>
+                            </div>
+                        </div>
+                        <div class="sm-post-result" id="smPostResult"></div>
+                    </div>
+
+                    <!-- OPC → SecondMe sync -->
+                    <div class="sm-sync-section">
+                        <h3>🔄 OPC → SecondMe 同步</h3>
+                        <p class="text-dim">将OPC联盟的想法一键同步到SecondMe广场</p>
+                        <div class="sm-sync-list" id="smSyncList"></div>
+                    </div>
+                </div>
+
                 <!-- Projects Page -->
                 <div class="page" id="page-projects">
                     <div class="page-header">
@@ -309,6 +398,7 @@
     </div>
 
     <script src="data.js"></script>
+    <script src="secondme.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

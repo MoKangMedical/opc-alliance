@@ -635,4 +635,265 @@
     updateUserUI();
     if (user) renderAll();
 
+    // ========================================
+    // SecondMe Integration
+    // ========================================
+    const smCfg = SecondMe.getConfig();
+
+    // Update profile bar
+    function updateSMProfile() {
+        const cfg = SecondMe.getConfig();
+        document.getElementById('smName').textContent = cfg.nickname;
+    }
+
+    // Tab switching
+    document.querySelectorAll('.sm-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.sm-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.sm-tab-content').forEach(c => c.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('sm' + capitalize(tab.dataset.tab)).classList.add('active');
+        });
+    });
+
+    function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+    // Settings
+    document.getElementById('smSettingsBtn').addEventListener('click', () => {
+        const panel = document.getElementById('smSettings');
+        panel.classList.toggle('hidden');
+        if (!panel.classList.contains('hidden')) {
+            document.getElementById('smTokenInput').value = SecondMe.getConfig().token;
+            document.getElementById('smApiInput').value = SecondMe.getConfig().apiBase;
+        }
+    });
+
+    document.getElementById('smCancelBtn').addEventListener('click', () => {
+        document.getElementById('smSettings').classList.add('hidden');
+    });
+
+    document.getElementById('smSaveBtn').addEventListener('click', () => {
+        const token = document.getElementById('smTokenInput').value.trim();
+        const apiBase = document.getElementById('smApiInput').value.trim();
+        if (token) SecondMe.updateConfig({ token });
+        if (apiBase) SecondMe.updateConfig({ apiBase });
+        document.getElementById('smSettings').classList.add('hidden');
+        checkSMConnection();
+    });
+
+    // Check connection
+    async function checkSMConnection() {
+        const statusEl = document.getElementById('smStatus');
+        statusEl.textContent = '连接中...';
+        statusEl.className = 'sm-status';
+        
+        const result = await SecondMe.getFeed(1);
+        if (result.ok && result.data && result.data.code === 0) {
+            statusEl.textContent = '● 已连接';
+            statusEl.className = 'sm-status connected';
+            document.getElementById('secondmeLive').style.display = 'inline';
+        } else if (result.ok && result.data && result.data.code === 401) {
+            statusEl.textContent = '⚠ Token无效';
+            statusEl.className = 'sm-status error';
+        } else if (result.status === 0) {
+            statusEl.textContent = '⚠ CORS限制';
+            statusEl.className = 'sm-status error';
+        } else {
+            statusEl.textContent = `⚠ 错误 ${result.data?.code || result.status}`;
+            statusEl.className = 'sm-status error';
+        }
+    }
+
+    // Load feed
+    let smFeedPage = 1;
+
+    async function loadSMFeed(page = 1) {
+        const list = document.getElementById('smFeedList');
+        list.innerHTML = '<div class="sm-empty"><p class="loading">加载中...</p></div>';
+
+        const result = await SecondMe.getFeed(page);
+        
+        if (result.status === 0) {
+            // CORS error — show proxy instructions
+            list.innerHTML = `
+                <div class="sm-empty">
+                    <p>⚠️ 浏览器跨域限制</p>
+                    <p style="font-size:0.82rem;color:var(--text-muted);margin-top:8px;">
+                        GitHub Pages 是静态站点，无法直接调用 SecondMe API。<br>
+                        解决方案：安装 CORS Unblock 浏览器扩展，或使用本地代理。
+                    </p>
+                    <button class="btn-outline" style="margin-top:12px;" onclick="loadSMFeed(1)">🔄 重试</button>
+                </div>`;
+            document.getElementById('smStatus').textContent = '⚠ CORS限制';
+            document.getElementById('smStatus').className = 'sm-status error';
+            return;
+        }
+
+        if (!result.ok || !result.data || result.data.code !== 0) {
+            list.innerHTML = `
+                <div class="sm-empty">
+                    <p>❌ 连接失败</p>
+                    <p style="font-size:0.82rem;color:var(--text-muted);">${result.data?.message || '未知错误'}</p>
+                    <button class="btn-outline" style="margin-top:12px;" onclick="document.getElementById('smSettingsBtn').click()">⚙️ 检查配置</button>
+                </div>`;
+            return;
+        }
+
+        const feed = result.data.data;
+        const items = feed?.list || feed?.records || feed || [];
+        
+        if (!items.length) {
+            list.innerHTML = '<div class="sm-empty"><p>暂无动态</p></div>';
+            return;
+        }
+
+        list.innerHTML = items.map(item => {
+            const author = item.author?.name || item.userName || '匿名用户';
+            const content = item.content || item.text || item.body || '';
+            const time = item.createTime || item.createdAt || '';
+            const likes = item.likeCount || item.likes || 0;
+            const comments = item.commentCount || item.comments || 0;
+            const postId = item.id || item.postId || '';
+            return `
+                <div class="sm-feed-item">
+                    <div class="sm-feed-header">
+                        <div class="sm-feed-avatar">${author.charAt(0)}</div>
+                        <span class="sm-feed-author">${author}</span>
+                        <span class="sm-feed-time">${formatSMTime(time)}</span>
+                    </div>
+                    <div class="sm-feed-body">${escapeHtml(content)}</div>
+                    <div class="sm-feed-actions">
+                        <button class="sm-feed-action" onclick="smLike('${postId}', this)">❤️ ${likes}</button>
+                        <button class="sm-feed-action">💬 ${comments}</button>
+                        <button class="sm-feed-action" onclick="smSyncToOPC('${escapeHtml(content).replace(/'/g, "\\'")}')">🔄 同步到OPC</button>
+                    </div>
+                </div>`;
+        }).join('');
+
+        document.getElementById('smStatus').textContent = '● 已连接';
+        document.getElementById('smStatus').className = 'sm-status connected';
+        document.getElementById('secondmeLive').style.display = 'inline';
+    }
+
+    // Load discover
+    async function loadSMDiscover() {
+        const list = document.getElementById('smDiscoverList');
+        list.innerHTML = '<div class="sm-empty"><p class="loading">发现中...</p></div>';
+
+        const result = await SecondMe.discoverUsers(1);
+        
+        if (result.status === 0) {
+            list.innerHTML = '<div class="sm-empty"><p>⚠️ 浏览器跨域限制，请安装 CORS 扩展</p></div>';
+            return;
+        }
+
+        if (!result.ok || !result.data || result.data.code !== 0) {
+            list.innerHTML = `<div class="sm-empty"><p>❌ ${result.data?.message || '加载失败'}</p></div>`;
+            return;
+        }
+
+        const users = result.data.data?.list || result.data.data?.records || result.data.data || [];
+        list.innerHTML = users.map(u => {
+            const name = u.name || u.nickname || u.userName || '用户';
+            const bio = u.bio || u.description || u.introduction || '';
+            return `
+                <div class="sm-discover-item">
+                    <div class="sm-feed-avatar">${name.charAt(0)}</div>
+                    <div style="flex:1;">
+                        <div class="sm-feed-author">${name}</div>
+                        <div style="font-size:0.82rem;color:var(--text-muted);">${escapeHtml(bio).substring(0, 80)}</div>
+                    </div>
+                    ${u.homepage || u.route ? `<a href="https://second.me/${u.route || u.homepage}" target="_blank" class="btn-outline btn-sm">访问</a>` : ''}
+                </div>`;
+        }).join('');
+    }
+
+    // Post to SecondMe
+    document.getElementById('smPostBtn').addEventListener('click', async () => {
+        const content = document.getElementById('smPostInput').value.trim();
+        const tagsStr = document.getElementById('smPostTags').value.trim();
+        if (!content) return;
+
+        const tags = tagsStr ? tagsStr.split(/[,，]/).map(t => t.trim()).filter(Boolean) : [];
+        const resultEl = document.getElementById('smPostResult');
+        resultEl.textContent = '发布中...';
+        resultEl.className = 'sm-post-result';
+
+        const result = await SecondMe.createPost(content, tags);
+        
+        if (result.ok && result.data && result.data.code === 0) {
+            resultEl.textContent = '✅ 发布成功！';
+            resultEl.className = 'sm-post-result success';
+            document.getElementById('smPostInput').value = '';
+            document.getElementById('smPostTags').value = '';
+        } else {
+            resultEl.textContent = `❌ ${result.data?.message || result.error || '发布失败'}`;
+            resultEl.className = 'sm-post-result error';
+        }
+    });
+
+    // Like post
+    window.smLike = async function(postId, btn) {
+        if (!postId) return;
+        await SecondMe.likePost(postId);
+        btn.style.color = 'var(--red)';
+    };
+
+    // Sync idea to OPC
+    window.smSyncToOPC = function(content) {
+        if (!content) return;
+        document.getElementById('ideaInput').value = content;
+        document.getElementById('ideaCategory').value = 'insight';
+        navigateTo('ideas');
+    };
+
+    // Load buttons
+    document.getElementById('smLoadFeed').addEventListener('click', () => loadSMFeed(1));
+    document.getElementById('smLoadDiscover').addEventListener('click', loadSMDiscover);
+
+    // Populate sync list with latest OPC ideas
+    function renderSyncList() {
+        const list = document.getElementById('smSyncList');
+        const sorted = [...ideas].sort((a, b) => (b.ts || 0) - (a.ts || 0)).slice(0, 5);
+        list.innerHTML = sorted.map(idea => `
+            <div class="sm-sync-item">
+                <div class="idea-body">${idea.content.substring(0, 80)}...</div>
+                <button class="btn-outline btn-sm" onclick="syncOPCToSM('${escapeHtml(idea.content).replace(/'/g, "\\'").replace(/\n/g, '\\n')}')">→ 发布</button>
+            </div>
+        `).join('');
+    }
+
+    window.syncOPCToSM = async function(content) {
+        if (!content) return;
+        const result = await SecondMe.createPost(content, ['OPC', '创业者联盟']);
+        if (result.ok && result.data && result.data.code === 0) {
+            alert('✅ 已同步到SecondMe广场！');
+        } else {
+            alert(`❌ ${result.data?.message || '同步失败'}`);
+        }
+    };
+
+    // Helpers
+    function escapeHtml(str) {
+        const d = document.createElement('div');
+        d.textContent = str;
+        return d.innerHTML;
+    }
+
+    function formatSMTime(ts) {
+        if (!ts) return '';
+        if (typeof ts === 'string' && ts.includes('-')) return ts;
+        const d = new Date(typeof ts === 'number' ? ts : parseInt(ts));
+        const diff = Date.now() - d.getTime();
+        if (diff < 60000) return '刚刚';
+        if (diff < 3600000) return Math.floor(diff / 60000) + '分钟前';
+        if (diff < 86400000) return Math.floor(diff / 3600000) + '小时前';
+        return Math.floor(diff / 86400000) + '天前';
+    }
+
+    // Init
+    updateSMProfile();
+    renderSyncList();
+    checkSMConnection();
+
 })();
