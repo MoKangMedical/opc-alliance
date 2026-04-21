@@ -21,7 +21,7 @@ const SECONDME = {
 
 const MIMO = {
     target: 'https://api.xiaomimimo.com',
-    token: 'sk-ccwzuzw9e1t42xjok84nfx7wrv4geuzc590ojipwfqga5uxl'
+    token: self.env.MIMO_API_KEY || ''
 };
 
 // 允许的来源
